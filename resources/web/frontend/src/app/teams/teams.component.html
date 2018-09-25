@@ -1,0 +1,190 @@
+<div class="container">
+  <h2>Teams</h2>
+  <div>You can add a teams: <i (click)="openModal(create)" class="fas fa-plus-square fa-2x"></i></div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th>Leader</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let team of dataAll">
+      <td>{{ team.name }}</td>
+      <td>{{ team.description }}</td>
+      <td>
+        <img src="{{ team.logo }}" alt="" width="100">
+      </td>
+      <td>{{ team.users.name }}</td>
+      <td>
+        <span (click)="openModal(update); getTeam(team.id)"><i class="fas fa-pen-square fa-2x"></i></span>&nbsp;
+        <span (click)="deleteTeam(team.id)"><i class="fas fa-trash-alt fa-2x"></i></span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--Form create-->
+<ng-template #create>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Create</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit) = "createTeam(createForm)" #createForm="ngForm">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Team's name</div>
+          <div class="col-sm">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter team's name"
+              ngModel name="name"
+              required>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Despcription</div>
+          <div class="col-sm">
+            <textarea
+              class="form-control"
+              ngModel name="description"
+              required>
+              </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Logo</div>
+          <div class="col-sm">
+            <input
+              type="file"
+              ngModel name="logo"
+              >
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Leader</div>
+          <div class="col-sm">
+            <select
+              name="leader_id"
+              [(ngModel)] = "selectedValue">
+              <option
+                *ngFor="let leader_name of dataAllUsers"
+                [ngValue] = "leader_name.id">{{ leader_name.name }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Leader</div>
+          <div class="col-sm">
+            <button type="submit" (click)="modalRef.hide()" class="btn btn-primary">Create</button> &nbsp;
+            <button (click)="modalRef.hide()" class="btn btn-danger">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!--Form update-->
+<ng-template #update>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Update</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit) = "updateTeam(updateForm, dataOne.id)" #updateForm="ngForm">
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Team's name</div>
+          <div class="col-sm">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Enter team's name"
+              [(ngModel)] = "dataOne.name"
+              name="name"
+              required>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Despcription</div>
+          <div class="col-sm">
+            <textarea
+              class="form-control"
+              [(ngModel)] = "dataOne.description"
+              name="description"
+              required>
+              </textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3"></div>
+          <div class="col-sm">
+            <img
+              src="{{ logo_name }}"
+              [(ngModel)] = "logo_name"
+              name="logo"
+              width="100"
+              ngDefaultControl>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Logo</div>
+          <div class="col-sm">
+            <input
+              type="file"
+              (change)="onChange($event)">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Leader</div>
+          <div class="col-sm">
+            <select
+              name="leader_id"
+              class="form-control"
+              [(ngModel)] = "selectedValue"
+              sele>
+              <option
+                *ngFor="let leader_name of dataAllUsers"
+                [ngValue] = "leader_name.id">
+                {{ leader_name.name }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="row">
+          <div class="col-sm-3">Leader</div>
+          <div class="col-sm">
+            <button type="submit" (click)="modalRef.hide()" class="btn btn-primary">Update</button> &nbsp;
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
